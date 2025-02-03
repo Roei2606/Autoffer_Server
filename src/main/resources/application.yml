@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: messaging-server
+
+  data:
+    mongodb:
+      uri: mongodb://root:secret@localhost:27017/messagingdb?authSource=admin
+
+  rsocket:
+    server:
+      transport: websocket
+      port: 7001
+
+server:
+  port: 8080
+  address: 0.0.0.0

@@ -1,0 +1,26 @@
+services:
+  mongodb:
+    image: 'mongo:latest'
+    environment:
+      - 'MONGO_INITDB_DATABASE=messagingdb'
+      - 'MONGO_INITDB_ROOT_USERNAME=root'
+      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
+    ports:
+      - '27017:27017'
+    networks:
+      - messaging-net
+
+  messaging-server:
+    build: .
+    depends_on:
+      - mongodb
+    ports:
+      - '8080:8080'
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://root:secret@mongodb:27017/messagingdb?authSource=admin
+    networks:
+      - messaging-net
+
+networks:
+  messaging-net:
+    driver: bridge
