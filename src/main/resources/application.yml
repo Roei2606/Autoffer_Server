@@ -1,7 +1,4 @@
 spring:
-  application:
-    name: messaging-server
-
   data:
     mongodb:
       uri: mongodb://root:secret@localhost:27017/messagingdb?authSource=admin
@@ -9,8 +6,10 @@ spring:
   rsocket:
     server:
       transport: websocket
+      mapping-path: /rsocket   # Add this
       port: 7001
+      address: 0.0.0.0        # Add this to bind to all interfaces
 
 server:
-  port: 8080
+  port: 8081
   address: 0.0.0.0

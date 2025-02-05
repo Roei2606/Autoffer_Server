@@ -1,7 +1,4 @@
 package org.socialnetwork.messagingserver.controllers
-
-
-
 import org.socialnetwork.messagingserver.models.ChatModel
 import org.socialnetwork.messagingserver.models.MessageModel
 import org.socialnetwork.messagingserver.services.ChatService

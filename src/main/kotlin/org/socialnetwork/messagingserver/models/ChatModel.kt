@@ -6,9 +6,10 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document(collection = "chats")
 data class ChatModel(
     @Id val id: String? = null,
-    val name: String?,
+    val name: String? = null,
     val participants: List<String>,
-    val isGroup: Boolean
+    val isGroup: Boolean = false,
+    var lastMessage: MessageModel? = null
 ) {
-    constructor() : this(null, "", emptyList(), false)
+    constructor() : this(null, null, listOf(), false, null)
 }

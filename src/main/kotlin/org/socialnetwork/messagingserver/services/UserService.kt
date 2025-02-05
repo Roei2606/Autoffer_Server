@@ -25,6 +25,11 @@ class UserService(private val userRepository: UserRepository) {
             )
     }
 
+    fun loginUser(username: String): Mono<UserModel> {
+        return userRepository.findByUsername(username)
+            .switchIfEmpty(registerUser(username)) // Create user if not found
+    }
+
     // ✅ Fetch All Users (RSocket Req-Stream)
 
     // ✅ שליפת כל המשתמשים (RSocket Req-Stream)

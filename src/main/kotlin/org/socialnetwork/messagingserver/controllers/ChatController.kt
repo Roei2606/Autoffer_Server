@@ -14,12 +14,12 @@ class ChatController(private val chatService: ChatService) {
 
     @MessageMapping("chats.getAll")
     fun getUserChats(@Payload userId: String): Flux<ChatModel> {
-        return chatService.getUserChats(userId, 0, 20)  // Default to first 20 chats
+        return chatService.getUserChats(userId, 0, 20)
     }
 
     @MessageMapping("chats.getMessages")
     fun getChatMessages(@Payload chatId: String): Flux<MessageModel> {
-        return chatService.getChatMessages(chatId, 0, 50)  // Default to first 50 messages
+        return chatService.getChatMessages(chatId, 0, 50)
     }
 
     @MessageMapping("chats.markRead")

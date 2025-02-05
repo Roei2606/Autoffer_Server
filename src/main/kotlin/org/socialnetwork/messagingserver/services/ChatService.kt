@@ -16,7 +16,7 @@ import java.util.*
 @Service
 class ChatService(
     private val chatRepository: ChatRepository,
-    private val messageRepository: MessageRepository
+    private val messageRepository: MessageRepository,
 ) {
 
     fun createChat(participants: List<String>, isGroup: Boolean, name: String?): Mono<ChatModel> {
@@ -28,6 +28,15 @@ class ChatService(
         )
         return chatRepository.save(chat)
     }
+
+    fun updateLastMessage(chatId: String, message: MessageModel): Mono<ChatModel> {
+        return chatRepository.findById(chatId)
+            .flatMap { chat ->
+                chat.lastMessage = message
+                chatRepository.save(chat)
+            }
+    }
+
 
     fun getUserChats(userId: String, page: Int, size: Int): Flux<ChatModel> {
         val pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "name"))

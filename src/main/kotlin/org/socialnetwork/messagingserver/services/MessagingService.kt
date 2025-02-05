@@ -12,15 +12,16 @@ import reactor.core.publisher.Sinks
 import java.time.LocalDateTime
 
 @Service
-class MessageService(private val messageRepository: MessageRepository) {
+class MessageService(
+    private val messageRepository: MessageRepository,
+    private val chatService: ChatService
+) {
 
-    // ✅ Real-Time Message Sink
-    private val messageSink: Sinks.Many<MessageModel> = Sinks.many().multicast().onBackpressureBuffer()
+    private val messageSink: Sinks.Many<MessageModel> = Sinks.many().multicast().directBestEffort()
 
 
     fun sendMessage(chatId: String, senderId: String, content: String): Mono<MessageModel> {
         val message = MessageModel(
-            id = null,                // (MongoDB will auto-generate)
             chatId = chatId,
             senderId = senderId,
             content = content,
@@ -28,22 +29,23 @@ class MessageService(private val messageRepository: MessageRepository) {
             readBy = mutableListOf()
         )
         return messageRepository.save(message)
-            .doOnSuccess { messageSink.tryEmitNext(it) } // Emit the new message in real-time
+            .doOnNext { messageSink.tryEmitNext(it) }
+            .flatMap { savedMessage ->
+                chatService.updateLastMessage(chatId, savedMessage)
+                    .thenReturn(savedMessage)
+            }
     }
 
-    // ✅ Subscribe to All Messages for Real-Time Updates
     fun subscribeToAllMessages(): Flux<MessageModel> {
         return messageSink.asFlux()
     }
 
-    // ✅ Get Unread Messages Count for a Specific Chat
     fun getUnreadCount(chatId: String, userId: String): Mono<Long> {
         return messageRepository.countByChatIdAndReadByNotContaining(chatId, userId)
     }
 
-    // ✅ Mark Messages as Read
+
     fun markMessagesAsRead(chatId: String, userId: String): Mono<Void> {
-        // Use Pageable.unpaged() to fetch all messages without pagination
         val unpaged: Pageable = Pageable.unpaged()
 
         return messageRepository.findAllByChatId(chatId, unpaged)
@@ -52,6 +54,6 @@ class MessageService(private val messageRepository: MessageRepository) {
                 message.readBy!!.add(userId)
                 messageRepository.save(message)
             }
-            .then() // Return Mono<Void> after completion
+            .then()
     }
 }

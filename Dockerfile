@@ -23,3 +23,18 @@ COPY build/libs/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
 EXPOSE 8080
+
+## Use an official OpenJDK runtime as a parent image
+#FROM openjdk:17-jdk-slim
+#
+## Set the working directory inside the container
+#WORKDIR /app
+#
+## Copy the JAR file (ensure your build outputs the JAR to the 'build/libs' directory)
+#COPY build/libs/messaging-server.jar /app/messaging-server.jar
+#
+## Expose necessary ports
+#EXPOSE 8080 7001
+#
+## Run the Spring Boot application
+#CMD ["java", "-jar", "/app/messaging-server.jar"]

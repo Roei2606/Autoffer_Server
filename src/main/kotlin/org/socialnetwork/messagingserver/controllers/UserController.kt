@@ -14,19 +14,22 @@ import org.socialnetwork.messagingserver.models.UserModel
 class UserController(
     private val userService: UserService)
 {
+    // Add this new login endpoint
+    @MessageMapping("users.login")
+    fun loginUser(@Payload username: String): Mono<UserModel> {
+        println("Received login request for: $username")
+        return userService.loginUser(username)
+    }
 
-    // ✅ **הוספת משתמש חדש (RSocket Req-Res)**
     @MessageMapping("users.register")
     fun registerUser(@Payload request: RegisterUserRequest): Mono<UserModel> {
         println("Received register request for: ${request.username}")
         return userService.registerUser(request.username!!)
     }
 
-    // ✅ **שליפת כל המשתמשים (RSocket Req-Stream)**
     @MessageMapping("users.getAll")
     fun getAllUsers(): Flux<UserModel> {
         return userService.getAllUsers()
     }
 }
-
 

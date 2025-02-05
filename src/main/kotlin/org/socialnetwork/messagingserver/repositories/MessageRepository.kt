@@ -9,7 +9,11 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 interface MessageRepository : ReactiveMongoRepository<MessageModel, String> {
-    fun findAllByChatId(chatId: String, pageable: Pageable): Flux<MessageModel>
+    fun findAllByChatId(
+        chatId: String,
+        pageable: Pageable
+    ): Flux<MessageModel>
     fun countByChatIdAndReadByNotContaining(chatId: String, userId: String): Mono<Long>
     fun findByChatIdAndReadByNotContaining(chatId: String, userId: String): Flux<MessageModel>
+
 }

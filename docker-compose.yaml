@@ -8,15 +8,18 @@ services:
     ports:
       - '27017:27017'
     networks:
-      - messaging-net
+      messaging-net:
+        aliases:
+          - mongodb
 
   messaging-server:
     build: .
     depends_on:
       - mongodb
     ports:
-      - '8080:8080'
+      - '7001:7001'
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATA_MONGODB_URI=mongodb://root:secret@mongodb:27017/messagingdb?authSource=admin
     networks:
       - messaging-net

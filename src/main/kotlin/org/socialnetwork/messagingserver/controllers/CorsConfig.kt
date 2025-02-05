@@ -1,4 +1,4 @@
-package org.socialnetwork.messagingserver.config
+package org.socialnetwork.messagingserver.controllers
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -12,9 +12,9 @@ class CorsConfig {
         return object : WebFluxConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
                 registry.addMapping("/**")
-                    .allowedOrigins("*")  // Allow all origins
-                    .allowedMethods("*")  // Allow all HTTP methods
-                    .allowedHeaders("*")  // Allow all headers
+                    .allowedOrigins("*")
+                    .allowedMethods("*")
+                    .allowedHeaders("*")
             }
         }
     }
