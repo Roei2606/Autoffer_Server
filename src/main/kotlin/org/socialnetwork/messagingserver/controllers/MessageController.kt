@@ -20,12 +20,13 @@ class MessageController(
 
     @MessageMapping("messages.channel")
     fun messageChannel(messages: Flux<MessageModel>): Flux<MessageModel> {
-        println("Server: Received message channel request")  // ✅ Add this log
         return messages.flatMap { message ->
-            println("Server: Received message - ${message.content}")  // ✅ Log message content
             messageService.sendMessage(message.chatId, message.senderId, message.content)
+                .doOnNext { println("Broadcasting message: ${it.content}") }
         }.mergeWith(messageService.subscribeToAllMessages())
     }
+
+
 
     @MessageMapping("messages.history")
     fun getChatHistory(request: Map<String, Any>): Flux<MessageModel> {
