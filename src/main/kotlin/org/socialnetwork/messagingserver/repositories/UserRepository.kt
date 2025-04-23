@@ -6,6 +6,6 @@ import reactor.core.publisher.Mono
 
 
 interface UserRepository : ReactiveMongoRepository<UserModel, String>{
-    fun findByUsername(username: String): Mono<UserModel>
+    fun findByUsername(userID: String): Mono<UserModel>
 }
 

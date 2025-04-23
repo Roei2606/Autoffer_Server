@@ -9,9 +9,7 @@ data class MessageModel(
     @Id val id: String? = null,
     val chatId: String,
     val senderId: String,
+    val receiverId: String,
     val content: String,
-    val timestamp: LocalDateTime? = LocalDateTime.now(),
-    val readBy: MutableList<String>? = mutableListOf()
-){
-    constructor() : this(null, "", "", "", LocalDateTime.now(), mutableListOf())
-}
+    val timestamp: String
+)

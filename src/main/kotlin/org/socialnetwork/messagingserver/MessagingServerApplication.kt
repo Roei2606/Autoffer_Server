@@ -8,4 +8,5 @@ class MessagingServerApplication
 
 fun main(args: Array<String>) {
 	runApplication<MessagingServerApplication>(*args)
+
 }

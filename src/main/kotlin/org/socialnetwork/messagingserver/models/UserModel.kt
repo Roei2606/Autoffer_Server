@@ -11,7 +11,7 @@ data class UserModel(
     val username: String?,
     @JsonFormat(pattern = "dd-MM-yyyy" + "HH:mm:ss")
     val registeredAt: LocalDateTime? = LocalDateTime.now(),
-    val chats: MutableList<String>? = mutableListOf()
+    var chats: MutableList<String>? = mutableListOf()
 ){
     constructor() : this(null, null,null,null)
 }

@@ -36,4 +36,28 @@ class UserService(private val userRepository: UserRepository) {
     fun getAllUsers(): Flux<UserModel> {
         return userRepository.findAll()
     }
+
+    fun getUserById(userId: String): Mono<UserModel> {
+        return userRepository.findById(userId)
+    }
+
+    fun addChatToUsers(chatId: String, userIds: List<String>): Mono<Void> {
+        return Flux.fromIterable(userIds)
+            .flatMap { userId ->
+                userRepository.findById(userId)
+                    .flatMap { user ->
+                        val updatedChats = (user.chats ?: mutableListOf()).toMutableList()
+                        if (!updatedChats.contains(chatId)) {
+                            updatedChats.add(chatId)
+                            val updatedUser = user.copy(chats = updatedChats)
+                            userRepository.save(updatedUser)
+                        } else {
+                            Mono.just(user)
+                        }
+                    }
+            }
+            .then()
+    }
+
+
 }

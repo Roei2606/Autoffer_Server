@@ -1,42 +1,56 @@
+//package org.socialnetwork.messagingserver.controllers
+//
+//import org.socialnetwork.messagingserver.models.MessageModel
+//import org.socialnetwork.messagingserver.services.ChatService
+//import org.socialnetwork.messagingserver.services.MessagingService
+//import org.springframework.messaging.handler.annotation.MessageMapping
+//import org.springframework.messaging.handler.annotation.Payload
+//import org.springframework.stereotype.Controller
+//import reactor.core.publisher.Flux
+//import reactor.core.publisher.Mono
+//
+//@Controller
+//class MessageController(
+//    private val messagingService: MessagingService,
+//    private val chatService: ChatService
+//) {
+//
+//    @MessageMapping("messages.send")
+//    fun sendMessage(@Payload message: MessageModel): Mono<MessageModel> {
+//        return messagingService.sendMessage(message)
+//    }
+//
+//    @MessageMapping("messages.stream")
+//    fun streamMessages(@Payload chatId: String): Flux<MessageModel> {
+//        return chatService.streamMessages(chatId)
+//    }
+//}
 package org.socialnetwork.messagingserver.controllers
 
-
-
 import org.socialnetwork.messagingserver.models.MessageModel
-import org.socialnetwork.messagingserver.repositories.MessageRepository
-import org.socialnetwork.messagingserver.services.MessageService
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Sort
+import org.socialnetwork.messagingserver.services.ChatService
+import org.socialnetwork.messagingserver.services.MessagingService
 import org.springframework.messaging.handler.annotation.MessageMapping
+import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Controller
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Controller
 class MessageController(
-    private val messageService: MessageService,
-    private val messageRepository: MessageRepository
+    private val messagingService: MessagingService,
+    private val chatService: ChatService
 ) {
 
-
-    @MessageMapping("messages.channel")
-    fun messageChannel(messages: Flux<MessageModel>): Flux<MessageModel> {
-        return messages.flatMap { message ->
-            messageService.sendMessage(message.chatId, message.senderId, message.content)
-                .doOnNext { println("Broadcasting message: ${it.content}") }
-        }.mergeWith(messageService.subscribeToAllMessages())
+    @MessageMapping("messages.send")
+    fun sendMessage(@Payload message: MessageModel): Mono<MessageModel> {
+        println("📨 messages.send invoked: from=${message.senderId} to=${message.receiverId} chatId=${message.chatId}")
+        return messagingService.sendMessage(message)
     }
 
-
-
-    @MessageMapping("messages.history")
-    fun getChatHistory(request: Map<String, Any>): Flux<MessageModel> {
-        val chatId = request["chatId"] as String
-        val page = request["page"] as Int
-        val size = request["size"] as Int
-
-        return messageRepository.findAllByChatId(
-            chatId,
-            PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "timestamp"))
-        )
+    @MessageMapping("messages.stream")
+    fun streamMessages(@Payload chatId: String): Flux<MessageModel> {
+        println("🔄 messages.stream invoked: chatId=$chatId")
+        return chatService.streamMessages(chatId)
     }
 }
