@@ -2,6 +2,8 @@ package org.socialnetwork.messagingserver.services
 
 import org.socialnetwork.messagingserver.models.ChatModel
 import org.socialnetwork.messagingserver.models.MessageModel
+import org.socialnetwork.messagingserver.models.UnreadCountRequest
+import org.socialnetwork.messagingserver.modelsdata.UnreadCountResponse
 import org.socialnetwork.messagingserver.repositories.ChatRepository
 import org.socialnetwork.messagingserver.repositories.MessageRepository
 import org.socialnetwork.messagingserver.repositories.UserRepository
@@ -139,6 +141,20 @@ class ChatService(
                 chatRepository.save(updated).then()
             }
     }
+
+
+    fun countUnreadMessages(request: UnreadCountRequest): Mono<UnreadCountResponse> {
+        return messageRepository.countByChatIdAndSenderIdNotAndReadByNotContaining(
+            request.chatId, request.userId, request.userId
+        ).map { count ->
+            UnreadCountResponse(request.chatId, count?.toInt() ?: 0)
+        }
+    }
+
+
+
+
+
 
 
 }

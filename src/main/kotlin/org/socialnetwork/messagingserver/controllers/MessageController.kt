@@ -28,6 +28,7 @@
 package org.socialnetwork.messagingserver.controllers
 
 import org.socialnetwork.messagingserver.models.MessageModel
+import org.socialnetwork.messagingserver.models.UnreadCountRequest
 import org.socialnetwork.messagingserver.services.ChatService
 import org.socialnetwork.messagingserver.services.MessagingService
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -53,4 +54,9 @@ class MessageController(
         println("🔄 messages.stream invoked: chatId=$chatId")
         return chatService.streamMessages(chatId)
     }
+    @MessageMapping("messages.markAsRead")
+    fun markAsRead(@Payload request: UnreadCountRequest): Mono<Void> {
+        return messagingService.markMessagesAsRead(request.chatId, request.userId)
+    }
+
 }

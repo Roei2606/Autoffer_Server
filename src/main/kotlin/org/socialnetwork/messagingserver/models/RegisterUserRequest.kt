@@ -1,7 +1,11 @@
 package org.socialnetwork.messagingserver.models
 
-class RegisterUserRequest(
-    val username: String?
-){
-    constructor() : this(null)
-}
+data class RegisterUserRequest(
+    val firstName: String,
+    val lastName: String,
+    val email: String,
+    val password: String,
+    val phoneNumber: String,
+    val address: String,
+    val profileType: ProfileType
+)

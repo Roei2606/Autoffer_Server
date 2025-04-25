@@ -7,11 +7,15 @@ import java.time.LocalDateTime
 
 @Document(collection = "users")
 data class UserModel(
-    @Id val id: String?,
-    val username: String?,
-    @JsonFormat(pattern = "dd-MM-yyyy" + "HH:mm:ss")
-    val registeredAt: LocalDateTime? = LocalDateTime.now(),
-    var chats: MutableList<String>? = mutableListOf()
-){
-    constructor() : this(null, null,null,null)
-}
+    @Id val id: String? = null,
+    val firstName: String,
+    val lastName: String,
+    val email: String,
+    val password: String,
+    val phoneNumber: String,
+    val address: String,
+    val profileType: ProfileType,
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    val registeredAt: LocalDateTime = LocalDateTime.now(),
+    val chats: MutableList<String> = mutableListOf()
+)

@@ -2,6 +2,7 @@ package org.socialnetwork.messagingserver.services
 
 import org.socialnetwork.messagingserver.models.MessageModel
 import org.socialnetwork.messagingserver.repositories.MessageRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import java.time.LocalDateTime
@@ -22,5 +23,15 @@ class MessagingService(private val messageRepository: MessageRepository,
                 chatService.emitMessage(it.chatId, it)
             }
     }
+    fun markMessagesAsRead(chatId: String, userId: String): Mono<Void> {
+        return messageRepository.findAllByChatIdOrderByTimestampAsc(chatId, PageRequest.of(0, Int.MAX_VALUE))
+            .filter { it.readBy?.contains(userId) != true }
+            .flatMap { message ->
+                val updated = message.copy(readBy = (message.readBy ?: mutableListOf()).apply { add(userId) })
+                messageRepository.save(updated)
+            }
+            .then()
+    }
+
 
 }

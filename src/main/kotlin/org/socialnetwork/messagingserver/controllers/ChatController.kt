@@ -1,7 +1,8 @@
 package org.socialnetwork.messagingserver.controllers
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.socialnetwork.messagingserver.models.*
+import org.socialnetwork.messagingserver.modelsdata.UnreadCountResponse
+import org.socialnetwork.messagingserver.repositories.MessageRepository
 import org.socialnetwork.messagingserver.services.ChatService
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -12,7 +13,8 @@ import reactor.core.publisher.Mono
 
 @Controller
 class ChatController(
-    private val chatService: ChatService
+    private val chatService: ChatService,
+    private val messageRepository: MessageRepository
 ) {
 
     @MessageMapping("chats.getOrCreate")
@@ -53,5 +55,17 @@ class ChatController(
         println("🚨 Error in ChatController: ${ex.message}")
         ex.printStackTrace()
         return Mono.error(ex)
+    }
+
+    @MessageMapping("chats.getUnreadCount")
+    fun getUnreadCount(@Payload request: UnreadCountRequest): Mono<UnreadCountResponse> {
+        return messageRepository.countByChatIdAndSenderIdNotAndReadByNotContaining(
+            request.chatId,
+            request.userId,  // senderId ≠ userId
+            request.userId   // readBy לא כולל userId
+        ).map { count ->
+            val safeCount = count?.toInt() ?: 0
+            UnreadCountResponse(request.chatId, safeCount)
+        }
     }
 }
