@@ -73,6 +73,9 @@ dependencies {
     // בדיקות Unit test ו-Integration test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
+
+    //PDF
+    implementation("org.apache.pdfbox:pdfbox:2.0.30")
 }
 
 kotlin {

@@ -2,19 +2,24 @@ package org.socialnetwork.messagingserver.controllers
 
 import org.socialnetwork.messagingserver.models.*
 import org.socialnetwork.messagingserver.modelsdata.UnreadCountResponse
+import org.socialnetwork.messagingserver.repositories.ChatRepository
 import org.socialnetwork.messagingserver.repositories.MessageRepository
 import org.socialnetwork.messagingserver.services.ChatService
+import org.springframework.http.ResponseEntity
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Controller
 class ChatController(
     private val chatService: ChatService,
-    private val messageRepository: MessageRepository
+    private val messageRepository: MessageRepository,
+    private val chatRepository: ChatRepository
 ) {
 
     @MessageMapping("chats.getOrCreate")
@@ -67,5 +72,17 @@ class ChatController(
             val safeCount = count?.toInt() ?: 0
             UnreadCountResponse(request.chatId, safeCount)
         }
+    }
+
+    @MessageMapping("chat.sendfile")
+    fun handleFileMessage(request: FileMessageRequest): Mono<Void> {
+        return chatService.sendFileMessage(request)
+    }
+
+    @GetMapping("/hasChats/{userId}")
+    fun hasChats(@PathVariable userId: String): Mono<ResponseEntity<Boolean>> {
+        return chatRepository.findByParticipantsContaining(userId)
+            .hasElements()
+            .map { hasChats -> ResponseEntity.ok(hasChats) }
     }
 }

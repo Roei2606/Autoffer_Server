@@ -7,5 +7,5 @@ data class RegisterUserRequest(
     val password: String,
     val phoneNumber: String,
     val address: String,
-    val profileType: ProfileType
+    val profileType: UserType
 )

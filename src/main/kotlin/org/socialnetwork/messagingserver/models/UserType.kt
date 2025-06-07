@@ -1,6 +1,7 @@
 package org.socialnetwork.messagingserver.models
 
-enum class ProfileType {
+enum class UserType {
     PRIVATE_CUSTOMER,
-    ARCHITECT
+    ARCHITECT,
+    FACTORY
 }

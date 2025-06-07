@@ -2,20 +2,27 @@ package org.socialnetwork.messagingserver.models
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.core.mapping.Field
 import java.time.LocalDateTime
 
-@Document(collection = "users")
-data class UserModel(
-    @Id val id: String? = null,
-    val firstName: String,
-    val lastName: String,
-    val email: String,
-    val password: String,
-    val phoneNumber: String,
-    val address: String,
-    val profileType: ProfileType,
+@Document("users")
+@TypeAlias("user")
+open class UserModel(
+    @Id
+    open val id: String? = null,
+    open val firstName: String,
+    open val lastName: String,
+    open val email: String,
+    open val password: String,
+    open val phoneNumber: String,
+    open val address: String,
+    @Field("profileType")
+    open val profileType: UserType,
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    val registeredAt: LocalDateTime = LocalDateTime.now(),
-    val chats: MutableList<String> = mutableListOf()
+    open val registeredAt: LocalDateTime = LocalDateTime.now(),
+    open val chats: MutableList<String> = mutableListOf(),
+    open val photoBytes: ByteArray? = null
+
 )

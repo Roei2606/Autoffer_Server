@@ -22,10 +22,11 @@ class UserController(
 
     // ✅ רישום משתמש חדש עם כל השדות
     @MessageMapping("users.register")
-    fun registerUser(@Payload request: RegisterUserRequest): Mono<UserModel> {
+    fun registerUser(@Payload request: RegisterUserRequest): Mono<UserModel>
+    {
+        println("🎉New register received: ${request.email}")
         return userService.registerUser(request)
     }
-
 
     // ✅ שליפת כל המשתמשים
     @MessageMapping("users.getAll")
@@ -47,4 +48,12 @@ class UserController(
         )
     }
 
+    // ✅ שליפה לפי סוג המשתמש
+    @MessageMapping("users.getByType")
+    fun getUsersByType(@Payload type: String): Flux<UserModel> {
+        val t = UserType.valueOf(type)
+        println("📦 Fetching users of type: $t")
+        return userService.getUsersByType(t)
+            .doOnNext { println("👤 Found user: ${it.firstName}, type: ${it.profileType}") }
+    }
 }
