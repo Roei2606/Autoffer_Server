@@ -1,0 +1,9 @@
+server:
+  port: 8081
+
+autoffer:
+  rsocket:
+    transport: ws      # אם תרצה TCP: tcp
+    host: 127.0.0.1    # או localhost; אם ה־messaging-server רץ על מחשב אחר — כתובת ה-LAN שלו
+    port: 8080
+    path: /rsocket     # אם transport=tcp אין path

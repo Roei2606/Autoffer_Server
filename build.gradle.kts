@@ -3,71 +3,50 @@ plugins {
     kotlin("plugin.spring") version "1.9.0"
     id("org.springframework.boot") version "3.2.2"
     id("io.spring.dependency-management") version "1.1.4"
-    application // ✅ מוסיף את האפשרות להגדיר mainClass
+    application
 }
 
 group = "org.socialnetwork"
 version = "0.0.1-SNAPSHOT"
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
+java { toolchain { languageVersion = JavaLanguageVersion.of(17) } }
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
-    // WebFlux - לתמיכה באפליקציה ריאקטיבית עם Spring Webflux
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-
-    // RSocket - עבור RSocket Server
     implementation("org.springframework.boot:spring-boot-starter-rsocket")
-
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
-
-    // Netty HTTP - חובה לתמיכה ב-Websocket עם RSocket
     implementation("io.projectreactor.netty:reactor-netty-http")
 
-
-    // Jackson Kotlin - סריאליזציה ודה-סריאליזציה של JSON
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-
-    // Kotlin Reflect (עבור תמיכה ברפלקשן של Kotlin)
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
-
-    // Kotlin Standard Library
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    // בדיקות Unit test ו-Integration test
+    implementation("org.apache.pdfbox:pdfbox:2.0.30")
+
+    implementation(project(":autoffer-dtos"))
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
-
-    // PDF
-    implementation("org.apache.pdfbox:pdfbox:2.0.30")
 }
 
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+        freeCompilerArgs += "-Xjsr305=strict"
     }
 }
 
-// ✅ קובע את הקובץ JAR הסופי
-tasks.named<Jar>("bootJar") {
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
     archiveFileName.set("app.jar")
 }
+tasks.withType<Test> { useJUnitPlatform() }
 
-// ✅ מוודא שה- JUnit רץ בצורה נכונה
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
-
-// ✅ מוסיף את mainClass להרצה – החלף בשם הקובץ שלך אם צריך
 application {
     mainClass.set("org.socialnetwork.messagingserver.MessagingServerApplicationKt")
 }
-
