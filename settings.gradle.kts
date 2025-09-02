@@ -21,8 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "messaging-server"
 
-// מודול ה-DTOs המשותף
-include(":autoffer-dtos")
 
-// נוסיף כשנקים את ה-Gateway
+include(":AutofferModelsRequests")
 include(":gateway")

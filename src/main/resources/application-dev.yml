@@ -1,0 +1,19 @@
+spring:
+  rsocket:
+    server:
+      port: 7001
+      transport: tcp
+
+
+app:
+  messaging:
+    rsocket:
+      host: 127.0.0.1
+      port: 7001
+
+
+docai:
+  base-url: http://localhost:5051
+  process-endpoint: /process_pdf/
+  connect-timeout-ms: 5000
+  read-timeout-ms: 90000

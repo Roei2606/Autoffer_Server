@@ -24,12 +24,14 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("com.github.librepdf:openpdf:1.3.39")
 
     implementation("org.apache.pdfbox:pdfbox:2.0.30")
 
-    implementation(project(":autoffer-dtos"))
+    implementation(project(":AutofferModelsRequests"))
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
@@ -50,3 +52,13 @@ tasks.withType<Test> { useJUnitPlatform() }
 application {
     mainClass.set("org.socialnetwork.messagingserver.MessagingServerApplicationKt")
 }
+
+tasks.register<JavaExec>("rsocketClient") {
+    group = "verification"
+    description = "Invoke RSocket endpoints (parse/preview/create) via WebSocket"
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("org.socialnetwork.messagingserver.tools.RsocketWsTestKt")
+    // אם תרצה לראות סטאקטרייסים מלאים:
+    jvmArgs("-Dorg.slf4j.simpleLogger.defaultLogLevel=info")
+}
+

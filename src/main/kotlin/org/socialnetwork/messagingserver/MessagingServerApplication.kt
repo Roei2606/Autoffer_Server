@@ -7,7 +7,7 @@ import org.springframework.boot.runApplication
 class MessagingServerApplication
 
 fun main(args: Array<String>) {
-	println("✅ Starting Autoffer Messaging Server...")
+	println("✅ Starting Autoffer Server...")
 	runApplication<MessagingServerApplication>(*args)
 
 }
