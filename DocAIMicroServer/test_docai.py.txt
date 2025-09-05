@@ -1,0 +1,20 @@
+import os
+from google.cloud import documentai_v1 as documentai
+
+# 1. Set the path to your service account key file.
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"autoffer-DocAI_custom.json"  # <-- change if you used a different filename!
+
+# 2. Set your GCP project details
+project_id = "autoffer-b606c"
+location = "us"              # e.g., "us" or "eu" or "me"
+# No processor ID needed for this test!
+
+def list_processors():
+    client = documentai.DocumentProcessorServiceClient()
+    parent = f"projects/{project_id}/locations/{location}"
+    print("Listing DocAI Processors in your project:")
+    for processor in client.list_processors(parent=parent):
+        print(f"- {processor.display_name} (ID: {processor.name})")
+
+if __name__ == "__main__":
+    list_processors()

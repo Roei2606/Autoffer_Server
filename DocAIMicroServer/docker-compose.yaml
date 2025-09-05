@@ -1,0 +1,12 @@
+services:
+  docai:
+    build: .
+    ports: ["8000:8000"]
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/var/secrets/docai-key.json
+      - PROJECT_ID=autoffer-b606c
+      - LOCATION=us
+      - PROCESSOR_ID=bc83c0ca2c0dfec8
+    volumes:
+      - ./app:/usr/src/app/app
+      - '/Users/roeihakmon/Library/Mobile Documents/com~apple~CloudDocs/RoeiPersonal/BscSE/messaging-server/gcloud/docai-key.json:/var/secrets/docai-key.json:ro'

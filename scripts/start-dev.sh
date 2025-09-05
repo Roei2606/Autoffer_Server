@@ -1,14 +1,103 @@
-#!/bin/bash
+##!/bin/bash
+#set -Eeuo pipefail
+#
+#SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+#ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+#mkdir -p "$ROOT/logs" "$ROOT/.pids"
+#
+#DOCAI_DIR="$ROOT/DocAIMicroServer"
+#DOCAI_PORT="${DOCAI_PORT:-5051}"
+#
+## גלה את האפליקציה
+#if [[ -f "$DOCAI_DIR/app/main.py" ]]; then
+#  DOCAI_APP="app.main:app"
+#elif [[ -f "$DOCAI_DIR/main.py" ]]; then
+#  DOCAI_APP="main:app"
+#elif [[ -f "$DOCAI_DIR/app.py" ]]; then
+#  DOCAI_APP="app:app"
+#else
+#  echo "❌ לא נמצא main של FastAPI (app/main.py | main.py | app.py)"; exit 1
+#fi
+#
+#export GOOGLE_APPLICATION_CREDENTIALS="/Users/roeihakmon/secrets/autoffer-docai-sa.json"
+#export GOOGLE_CLOUD_PROJECT="autoffer-b606c"
+#export DOCAI_PROJECT_ID="autoffer-b606c"
+#export DOCAI_LOCATION="eu"
+#export DOCAI_PROCESSOR_ID="bc83c0ca2c0dfec8"
+#export DOCAI_INTERNAL_API_KEY="${DOCAI_INTERNAL_API_KEY:-some-long-secret}"
+#
+## חשוב: להריץ מתוך DocAIMicroServer (או להשתמש ב--app-dir)
+#(
+#  cd "$DOCAI_DIR"
+#  # אופציונלי: להבטיח ש-PYTHONPATH כולל את התיקייה
+#  export PYTHONPATH="$DOCAI_DIR:${PYTHONPATH:-}"
+#  nohup ./.venv/bin/uvicorn --app-dir "$DOCAI_DIR" "$DOCAI_APP" \
+#    --host 0.0.0.0 --port "$DOCAI_PORT" --reload \
+#    > "$ROOT/logs/docai.log" 2>&1 &
+#  echo $! > "$ROOT/.pids/docai.pid"
+#)
+#
+## המתנה שה־API יעלה
+#for i in {1..60}; do
+#  curl -fsS "http://127.0.0.1:${DOCAI_PORT}/docs" >/dev/null 2>&1 && break
+#  sleep 0.5
+#done
+#if curl -fsS "http://127.0.0.1:${DOCAI_PORT}/docs" >/dev/null 2>&1; then
+#  echo "DocAI UP (pid $(cat "$ROOT/.pids/docai.pid")) → http://localhost:${DOCAI_PORT}/docs"
+#else
+#  echo "❌ DocAI לא עלה. לוג: logs/docai.log"
+#  tail -n 100 "$ROOT/logs/docai.log" || true
+#  exit 1
+#fi
+#
+## ----- gateway -----
+#GATEWAY_PORT="${GATEWAY_PORT:-8090}"
+#(
+#  cd "$ROOT"
+# nohup ./gradlew :gateway:bootRun --args="--server.port=${GATEWAY_PORT} --spring.profiles.active=dev" \
+#   > "$ROOT/logs/gateway.log" 2>&1 &
+#  echo $! > "$ROOT/.pids/gateway.pid"
+#)
+#echo "gateway starting (pid $(cat "$ROOT/.pids/gateway.pid")) → http://localhost:${GATEWAY_PORT}"
+
+#/bin/bash
 set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 mkdir -p "$ROOT/logs" "$ROOT/.pids"
 
-DOCAI_DIR="$ROOT/DocAIMicroServer"
-DOCAI_PORT="${DOCAI_PORT:-5051}"
+# ── טעינת .env.local (אופציונלי; אל תעלה ל-git) ───────────────────────────────
+if [[ -f "$ROOT/.env.local" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  . "$ROOT/.env.local"
+  set +a
+fi
 
-# גלה את האפליקציה
+DOCAI_DIR="$ROOT/DocAIMicroServer"
+
+# ── ברירות מחדל שמכבדות ENV חיצוני ────────────────────────────────────────────
+: "${DOCAI_PORT:=8000}"                                   # DocAI על 8000
+: "${PROJECT_ID:=autoffer-b606c}"
+: "${LOCATION:=us}"
+: "${PROCESSOR_ID:=bc83c0ca2c0dfec8}"                     # עדכן אם צריך
+
+# ✅ ברירת מחדל עם הנתיב שסיפקת (ניתן לעקוף ב-ENV חיצוני)
+GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_APPLICATION_CREDENTIALS:-/Users/roeihakmon/Library/Mobile Documents/com~apple~CloudDocs/RoeiPersonal/BscSE/messaging-server/gcloud/docai-key.json}"
+
+: "${GATEWAY_PORT:=8090}"
+
+export PROJECT_ID LOCATION PROCESSOR_ID GOOGLE_APPLICATION_CREDENTIALS DOCAI_PORT
+
+# ── בדיקות בסיס ────────────────────────────────────────────────────────────────
+if [[ ! -f "$GOOGLE_APPLICATION_CREDENTIALS" ]]; then
+  echo "❌ GOOGLE_APPLICATION_CREDENTIALS לא קיים:"
+  echo "   $GOOGLE_APPLICATION_CREDENTIALS"
+  exit 1
+fi
+
+# ── זיהוי אפליקציית FastAPI ───────────────────────────────────────────────────
 if [[ -f "$DOCAI_DIR/app/main.py" ]]; then
   DOCAI_APP="app.main:app"
 elif [[ -f "$DOCAI_DIR/main.py" ]]; then
@@ -16,28 +105,31 @@ elif [[ -f "$DOCAI_DIR/main.py" ]]; then
 elif [[ -f "$DOCAI_DIR/app.py" ]]; then
   DOCAI_APP="app:app"
 else
-  echo "❌ לא נמצא main של FastAPI (app/main.py | main.py | app.py)"; exit 1
+  echo "❌ לא נמצא main של FastAPI (app/main.py | main.py | app.py)"
+  exit 1
 fi
 
-export GOOGLE_APPLICATION_CREDENTIALS="/Users/roeihakmon/secrets/autoffer-docai-sa.json"
-export GOOGLE_CLOUD_PROJECT="autoffer-b606c"
-export DOCAI_PROJECT_ID="autoffer-b606c"
-export DOCAI_LOCATION="eu"
-export DOCAI_PROCESSOR_ID="bc83c0ca2c0dfec8"
-export DOCAI_INTERNAL_API_KEY="${DOCAI_INTERNAL_API_KEY:-some-long-secret}"
+# ── בחירת uvicorn (מ־venv אם קיים, אחרת מה-PATH) ─────────────────────────────
+UVICORN_BIN="$DOCAI_DIR/.venv/bin/uvicorn"
+if [[ ! -x "$UVICORN_BIN" ]]; then
+  UVICORN_BIN="$(command -v uvicorn || true)"
+fi
+if [[ -z "$UVICORN_BIN" ]]; then
+  echo "❌ uvicorn לא נמצא. התקן venv או pip install uvicorn"
+  exit 1
+fi
 
-# חשוב: להריץ מתוך DocAIMicroServer (או להשתמש ב--app-dir)
+# ── הרצת DocAI sidecar ─────────────────────────────────────────────────────────
 (
   cd "$DOCAI_DIR"
-  # אופציונלי: להבטיח ש-PYTHONPATH כולל את התיקייה
   export PYTHONPATH="$DOCAI_DIR:${PYTHONPATH:-}"
-  nohup ./.venv/bin/uvicorn --app-dir "$DOCAI_DIR" "$DOCAI_APP" \
+  nohup "$UVICORN_BIN" --app-dir "$DOCAI_DIR" "$DOCAI_APP" \
     --host 0.0.0.0 --port "$DOCAI_PORT" --reload \
     > "$ROOT/logs/docai.log" 2>&1 &
   echo $! > "$ROOT/.pids/docai.pid"
 )
 
-# המתנה שה־API יעלה
+# ── המתנה ל־/docs ──────────────────────────────────────────────────────────────
 for i in {1..60}; do
   curl -fsS "http://127.0.0.1:${DOCAI_PORT}/docs" >/dev/null 2>&1 && break
   sleep 0.5
@@ -50,12 +142,11 @@ else
   exit 1
 fi
 
-# ----- gateway -----
-GATEWAY_PORT="${GATEWAY_PORT:-8090}"
+# ── הרצת gateway ───────────────────────────────────────────────────────────────
 (
   cd "$ROOT"
- nohup ./gradlew :gateway:bootRun --args="--server.port=${GATEWAY_PORT} --spring.profiles.active=dev" \
-   > "$ROOT/logs/gateway.log" 2>&1 &
+  nohup ./gradlew :gateway:bootRun --args="--server.port=${GATEWAY_PORT} --spring.profiles.active=dev" \
+    > "$ROOT/logs/gateway.log" 2>&1 &
   echo $! > "$ROOT/.pids/gateway.pid"
 )
 echo "gateway starting (pid $(cat "$ROOT/.pids/gateway.pid")) → http://localhost:${GATEWAY_PORT}"

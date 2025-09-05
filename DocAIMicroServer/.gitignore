@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.db
+*.sqlite3
+*.log
+
+# Virtual environment
+venv/
+env/
+
+# VSCode or JetBrains IDE settings
+.vscode/
+.idea/
+
+# Test/large files
+*.pdf
+
+# GCP / secret keys
+*.json
+
+# Docker
+*.pid

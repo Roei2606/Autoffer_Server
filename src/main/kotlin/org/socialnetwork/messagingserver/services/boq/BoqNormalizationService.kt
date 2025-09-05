@@ -35,51 +35,69 @@ class BoqNormalizationService(
             val dims = MeasurementParser.parse(f["measurements"])
             if (dims == null) {
                 issues += NormalizationIssue(sourceId, run, IssueType.INCOMPLETE_MEASUREMENTS, f["measurements"])
-                if (!skipUnparseable) return@forEach
+                if (!skipUnparseable) { run++; return@forEach }
                 run++; return@forEach
             }
             var (w, h) = dims
 
-            // שימוש + פרופיל
+            // שימוש + פרופיל (NEW: שימוש ב-Resolver)
             val usageGuess: UsageGuess = UsageAndAliasResolver.guessUsage(f["configuration"], f["opening"])
             val aliasProfile = UsageAndAliasResolver.resolveProfileNumberAlias(f["model_number"])
             val usageType = UsageAndAliasResolver.usageTypeOf(aliasProfile, usageGuess)
 
+            // ננסה קטלוג; אם לא קיים – נייצר DTO "לא ידוע" ונמשיך (CHANGED)
             val profileEntry = chooseProfileEntry(aliasProfile, usageType, w, h)
-            if (profileEntry == null) {
-                issues += NormalizationIssue(sourceId, run, IssueType.UNKNOWN_PROFILE,
-                    "alias=$aliasProfile, usage=$usageType, measures=$w/$h")
-                if (!skipUnparseable) return@forEach
-                run++; return@forEach
-            }
+            val (profileDto, oriented) =
+                if (profileEntry != null) {
+                    val orientedDims = orientToFit(profileEntry, w, h)
+                    if (orientedDims == null) {
+                        issues += NormalizationIssue(
+                            sourceId, run, IssueType.OUT_OF_RANGE,
+                            "profile=${profileEntry.profileNumber}/${profileEntry.usageType}, measures=$w/$h"
+                        )
+                        AlumProfileModelDTO(
+                            profileNumber = profileEntry.profileNumber,
+                            usageType = profileEntry.usageType,
+                            pricePerSquareMeter = profileEntry.pricePerSquareMeter
+                        ) to (w to h) // עדיין נוצר Item – לא זורקים
+                    } else {
+                        AlumProfileModelDTO(
+                            profileNumber = profileEntry.profileNumber,
+                            usageType = profileEntry.usageType,
+                            pricePerSquareMeter = profileEntry.pricePerSquareMeter
+                        ) to orientedDims
+                    }
+                } else {
+                    // לא נמצא בקטלוג → Item ייבנה עם פרופיל "לא ידוע" (מחיר 0) + Issue (NEW)
+                    issues += NormalizationIssue(
+                        sourceId, run, IssueType.UNKNOWN_PROFILE,
+                        "alias=${aliasProfile ?: "?"}, usage=$usageType, measures=$w/$h"
+                    )
+                    AlumProfileModelDTO(
+                        profileNumber = aliasProfile ?: "UNKNOWN",
+                        usageType = usageType,
+                        pricePerSquareMeter = 0.0
+                    ) to (w to h)
+                }
 
-            orientToFit(profileEntry, w, h)?.let { (nw, nh) -> w = nw; h = nh } ?: run {
-                issues += NormalizationIssue(sourceId, run, IssueType.OUT_OF_RANGE,
-                    "profile=${profileEntry.profileNumber}/${profileEntry.usageType}, measures=$w/$h")
-                if (!skipUnparseable) return@forEach
-                run++; return@forEach
-            }
+            // עדכון מימדים אם אוריינטציה הוחלפה (רוחב/גובה)
+            w = oriented.first; h = oriented.second
 
-            // זכוכית
+            // זכוכית (CHANGED: אם לא נמצא בקטלוג – נייצר GlassDTO עם מחיר 0 ולא נזרוק את הפריט)
             val glassType = resolveGlassType(f["glazing"], profileEntry)
             val glassEntry = catalog.findGlassEntry(glassType)
-            if (glassEntry == null) {
-                issues += NormalizationIssue(sourceId, run, IssueType.INCOMPATIBLE_GLASS, "type=$glassType")
-                if (!skipUnparseable) return@forEach
-                run++; return@forEach
-            }
+            val glassDto =
+                if (glassEntry != null) {
+                    GlassModelDTO(
+                        type = glassEntry.type,
+                        pricePerSquareMeter = glassEntry.pricePerSquareMeter
+                    )
+                } else {
+                    issues += NormalizationIssue(sourceId, run, IssueType.INCOMPATIBLE_GLASS, "type=$glassType")
+                    GlassModelDTO(type = glassType, pricePerSquareMeter = 0.0)
+                }
 
-            // מיפוי ל־DTOים שלך
-            val profileDto = AlumProfileModelDTO(
-                profileNumber = profileEntry.profileNumber,
-                usageType = profileEntry.usageType,
-                pricePerSquareMeter = profileEntry.pricePerSquareMeter
-            )
-            val glassDto = GlassModelDTO(
-                type = glassEntry.type,
-                pricePerSquareMeter = glassEntry.pricePerSquareMeter
-            )
-
+            // בניית ה-Item (CHANGED: תמיד בונים, גם כשאין פרופיל/זכוכית בקטלוג)
             items += ItemModelDTO(
                 itemNumber = parseItemNumber(sourceId, run),
                 profile = profileDto,
@@ -103,17 +121,18 @@ class BoqNormalizationService(
         usageType: AlumProfileUsageType,
         w: Double, h: Double
     ): ProfileCatalogEntry? {
-        // 1) אם יש מספר פרופיל – ננסה אותו קודם
+        // 1) אם יש מספר/אליאס – ננסה קודם
         if (aliasProfile != null) {
             catalog.findProfileEntry(aliasProfile, usageType)?.let { p ->
                 if (orientToFit(p, w, h) != null) return p
             }
         }
-        // 2) מועמדים לפי usageType (ממוין: זול תחילה)
+        // 2) נסה לפי usageType (ממויין: זול→יקר)
         val candidates = catalog.findProfilesByUsage(usageType)
             .sortedWith(compareBy<ProfileCatalogEntry> { it.isExpensive }.thenBy { it.pricePerSquareMeter })
         return candidates.firstOrNull { orientToFit(it, w, h) != null }
             ?: catalog.allProfileEntries().firstOrNull { orientToFit(it, w, h) != null }
+        // אם לא נמצא – נחזיר null ונבנה Item עם פרופיל "לא ידוע"
     }
 
     // בדיקת טווחים כולל החלפת רוחב/גובה אם זה מאפשר התאמה
@@ -127,9 +146,13 @@ class BoqNormalizationService(
         return null
     }
 
-    private fun resolveGlassType(glazingRaw: String?, profile: ProfileCatalogEntry): String {
+    private fun resolveGlassType(glazingRaw: String?, profile: ProfileCatalogEntry?): String {
         val s = glazingRaw ?: ""
         val isInsulated = s.contains("Insulated", true) || s.contains("בידוד") || s.contains("בידודית") || s.contains("בידודת")
-        return if (isInsulated) "Insulated 12+18+12" else profile.recommendedGlassType
+        return when {
+            isInsulated -> "Insulated 12+18+12"
+            profile != null -> profile.recommendedGlassType
+            else -> "Generic 6mm" // NEW: ברירת מחדל כשאין פרופיל
+        }
     }
 }

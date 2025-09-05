@@ -15,6 +15,23 @@ import java.io.ByteArrayOutputStream
 import javax.imageio.IIOException
 import org.slf4j.LoggerFactory
 
+data class PdfProject(
+    val id: String,
+    val projectAddress: String = "-",          // ברירת מחדל
+    val items: List<ItemModelDTO>
+)
+
+data class PdfClient(
+    val firstName: String,
+    val lastName: String = "",                 // ברירת מחדל
+    val phoneNumber: String = "",              // ברירת מחדל
+    val email: String = ""                     // ברירת מחדל
+)
+
+data class PdfFactoryUser(
+    val factoryName: String = "Factory",       // ברירת מחדל
+    val factor: Double = 1.0                   // ברירת מחדל
+)
 
 @Component
 class PdfGenerator {

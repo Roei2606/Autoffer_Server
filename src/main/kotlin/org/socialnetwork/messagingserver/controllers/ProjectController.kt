@@ -16,7 +16,7 @@ import reactor.core.scheduler.Schedulers
 class ProjectController(
     private val projectService: ProjectService,
     private val docAiClient: DocAiClient,                 // קיים
-    private val autoQuoteService: AutoQuoteService,
+    private val autoQuoteService: AutoQuoteService
 ) {
     @MessageMapping("project.create")
     fun createProject(@Payload request: CreateProjectRequest): Mono<ProjectDTO> =

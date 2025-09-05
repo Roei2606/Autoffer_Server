@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "autoffer-b606c",
+  "private_key_id": "adf3683afdeb20f647bb10b044c6498431d43f51",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCl4qWCMFgNG8SH\ndQmqK14k2X+sRNH7KCdwWZx5nzrZyWkoH41fJvNtqkide50538DsRfUpso4BJ47y\n8vxkLaDR3EjF6StLXvy+BRhHqoBRgy243pkKz2i3NqS1qcdsj2MOSE3a4dK2kXCL\n24zYR/oPaMh/5b1BMo2Z6IYlLZgfFnyN5EZBpm2L+a5fFFCrPVYhXibkbcaLh4vI\nGKmMVwoyPhDjPm6TcA/CSzueSWzOAJR+brBWqL7QSa04I2Wd3OkwFdQyPhDdW0WH\nUdubjDGxiMcLJTlmdLCNcj6JYVmnbQqjEgXRtMreF+E/YQ1V4Ao5BSo4W0jByuMd\nl0zLLZ9FAgMBAAECggEABPd/iaGdbU0Myhp+vtXcFIHfoP6Rg/HclnBUb07Ncgpm\nB+HD95qgtMKhuHdkSoCQ0/I3SDeUqWOwE8WjOXOlSktMcYKM/Y17R0w7QSARhf9F\nvfCKSAjUQ5ITBe5urmkvp9SR4jEbQESkCEf7VFl5Wv9B65RrIXncRASyiYfvM1UK\nb4tzlAu1pIclE77Ev4mR7FqqwUc2W5cyusol2qzURAyRUC2D8TCDR63aUI10Q3ye\ndsqjPOUl5jj1d9RemBr9M48gIjQqazNjrcuarNgu17PkKAcUNxjiZ3Wrg/Irqjt0\nojcqZq8hoUvHCo4c5+pGqWUCJjUaqOKjXK8N1elV6QKBgQDRvfWBGtnd3Qyz6mYg\nuiITKuCGwt1T88Dj3EbLiOLEsqKNZRfdndxkE0L4yfnVf2HCoV7QLC742MAP6Vuy\nqVYhNFS9o8HwAiJ/itcx/v4Kf2YnuOwgmplyQm0VOIHiYx74saxk7IkqLrjjI246\nnoJXjGxyUROE2fXgqK+KaamE+QKBgQDKeImc79Y5OI8IGnxZ+d8GkZDzzB2XHY7X\naT4qOgdgKUuwRk1trNE4ZSP8Mj3OkNATZmSjykZEd5rgOt+EtaH5ppW3gRslaEbY\nrvrpN/y6cAqzbEjqlvDeCDa1MG3A3D7SzzWaZETt1Jj4yDRBT+sLRMJD1DMjC/bE\nYTdnc/ybrQKBgD+KOqvIBKSP6N9AbXwQp24DGU36Dq72M0NUYiYa7AgGzfPj4l0D\nC9dNdoaEOamSE32xAVYzbG96yoSHf34airs4bUueJoydOPJGj3bX9wIbIkl6Xh5q\nd34D3aQGIGMDAEj7Gmzgs5UR3nUBMM2VY4s+QURIh49BsJlEwRk/dVmRAoGAcvQ2\n5YSCM2C6TJaFDazBhIA3NUQpdLfSdtkI836Y2272yzFPGrro2sUJxlFcKCCuEqWq\n9BePB6aEp1SlvTpGqXB8RoClwfpPZw0J5knkUpH0cWREjfR+8wDk1sCVP8+MV7JP\ns8XEIOf4ph89E+vk/jPevBYJppdPVrX/d9wxis0CgYA+1Lcdv+rkKhWwv/YWzfIe\niyTAGDaeQmX4NWxqjmzOEV5ZjSSXb/KvqRk+RKd6jGZnrWW1kUePegoSliGP9SLj\nGhD9l4/G4kO72KRtLmIO8iwss/CGwEGshy7Qu+9lpvSDo1erTq4o8pUnGDPwYhtW\nHhAZc2gHZrvx8h0p7RtkxA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "custom-docai-access@autoffer-b606c.iam.gserviceaccount.com",
+  "client_id": "101358524274258415167",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/custom-docai-access%40autoffer-b606c.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

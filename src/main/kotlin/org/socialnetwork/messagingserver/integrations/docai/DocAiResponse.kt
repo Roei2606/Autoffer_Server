@@ -1,6 +1,7 @@
 package org.socialnetwork.messagingserver.integrations.docai
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonSetter
+import com.fasterxml.jackson.annotation.Nulls
 
 data class DocAiResponse(
     val results: List<DocAiResult> = emptyList(),
@@ -9,19 +10,14 @@ data class DocAiResponse(
 
 data class DocAiResult(
     val page: Int,
-    val fields: Map<String, String> = emptyMap()
+    @JsonSetter(nulls = Nulls.AS_EMPTY)
+    val fields: Map<String, String> = emptyMap(),
+    val error: String? = null
 )
 
 data class DocAiTiming(
-    @JsonProperty("total_duration_seconds")
-    val totalDurationSeconds: Double? = null,
-
-    @JsonProperty("processing_duration_seconds")
-    val processingDurationSeconds: Double? = null,
-
-    @JsonProperty("pages_processed")
-    val pagesProcessed: Int? = null,
-
-    @JsonProperty("average_per_page_seconds")
-    val averagePerPageSeconds: Double? = null
+    val total_duration_seconds: Double? = null,
+    val processing_duration_seconds: Double? = null,
+    val pages_processed: Int? = null,
+    val average_per_page_seconds: Double? = null
 )

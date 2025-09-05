@@ -1,11 +1,14 @@
+// src/main/kotlin/org/socialnetwork/messagingserver/services/autoquote/AutoQuoteService.kt
 package org.socialnetwork.messagingserver.services.autoquote
 
+import FactoryUserModel
 import org.socialnetwork.messagingserver.integrations.docai.DocAiClient
 import org.socialnetwork.messagingserver.models.*
 import org.socialnetwork.messagingserver.repositories.QuoteRepository
 import org.socialnetwork.messagingserver.services.PricingService
 import org.socialnetwork.messagingserver.services.boq.BoqNormalizationService
-import org.socialnetwork.messagingserver.services.pdf.QuotePdfService
+import org.socialnetwork.messagingserver.utils.PdfGenerator   // 👈 להשתמש במחלקה שלך
+import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import java.time.Instant
@@ -15,9 +18,10 @@ class AutoQuoteService(
     private val docAiClient: DocAiClient,
     private val normalization: BoqNormalizationService,
     private val pricing: PricingService,
-    private val quoteRepository: QuoteRepository
+    private val quoteRepository: QuoteRepository,
+    private val pdfGenerator: PdfGenerator       // 👈 הזרקה של PdfGenerator
 ) {
-    private val pdf = QuotePdfService() // פשוט ל-MVP; אפשר @Bean אם תרצה
+    // הסר את QuotePdfService הישן אם קיים
 
     fun preview(req: AutoQuoteFromPdfRequest): AutoQuotePreviewResponse {
         val t0 = System.currentTimeMillis()
@@ -49,17 +53,55 @@ class AutoQuoteService(
 
     fun create(req: AutoQuoteFromPdfRequest): Mono<AutoQuoteCreateResponse> {
         return Mono.fromCallable {
-            // 1) DocAI
             val doc = docAiClient.processPdf(req.pdfBytes, req.filename ?: "boq.pdf")
-            // 2) Normalize
             val norm = normalization.normalize(doc, skipUnparseable = req.skipUnparseable ?: true)
-            // 3) Pricing
-            val factor = req.factor ?: 1.0
+            val factor = req.factor ?: req.factory?.factor ?: 1.0
             val priced = pricing.price(norm.items, factor)
             Triple(norm, factor, priced.finalTotal)
         }.flatMap { (norm, factor, finalTotal) ->
-            // 4) Build QuoteModel
-            val pdfBytes = pdf.render(req.projectId, req.factoryId, norm.items, finalTotal)
+
+            // --- Build models for PdfGenerator (בלי לשנות את החתימה) ---
+            val projectForPdf = ProjectModel(
+                id = req.projectId,
+                clientId = req.projectId + "-client",              // מזהה זמני
+                factoryIds = listOf(req.factoryId),
+                projectAddress = req.projectAddress ?: "-",
+                items = norm.items
+            )
+
+            val c: PdfClientDTO? = req.client
+            val clientForPdf = UserModel(
+                id = projectForPdf.clientId,
+                firstName = c?.firstName ?: "Customer",
+                lastName  = c?.lastName ?: "",
+                email     = c?.email ?: "-",
+                password  = "__PDF__",                 // ערך דמה – נדרש ע"י המודל
+                phoneNumber = c?.phone ?: "-",
+                address     = c?.address ?: "-",
+                profileType = UserType.PRIVATE_CUSTOMER
+            )
+
+            val f: PdfFactoryUserDTO? = req.factory
+            val factoryUserForPdf = FactoryUserModel(
+                businessId = f?.businessId ?: "",
+                factor = factor,
+                factoryName = f?.factoryName ?: (req.factoryId),
+                id = req.factoryId,
+                firstName = f?.firstName ?: "Factory",
+                lastName  = f?.lastName ?: "",
+                email     = f?.email ?: "-",
+                password  = "__PDF__",                 // ערך דמה – נדרש ע"י המודל
+                phoneNumber = f?.phone ?: "-",
+                address     = f?.address ?: "-",
+                profileType = UserType.FACTORY
+            )
+
+            val logoBytes = loadFactoryLogo(req.factoryId)
+            val pdfBytes = pdfGenerator.generateQuotePdf(
+                projectForPdf, clientForPdf, factoryUserForPdf, logoBytes
+            )
+            // ------------------------------------------------------------
+
             val quote = QuoteModel(
                 factoryId = req.factoryId,
                 projectId = req.projectId,
@@ -70,7 +112,7 @@ class AutoQuoteService(
                 status = "RECEIVED",
                 createdAt = Instant.now()
             )
-            // 5) Save
+
             quoteRepository.save(quote).map {
                 AutoQuoteCreateResponse(
                     projectId = it.projectId,
@@ -82,5 +124,20 @@ class AutoQuoteService(
                 )
             }
         }
+    }
+
+
+
+    private fun loadFactoryLogo(factoryId: String?): ByteArray {
+        // 1) נסה לוגו לפי מפעל (למשל resources/static/logos/<factoryId>.jpg)
+        val specific = factoryId?.let { "static/logos/${it}.jpg" }
+        specific?.let {
+            ClassPathResource(it).let { res ->
+                if (res.exists()) return res.inputStream.use { it.readBytes() }
+            }
+        }
+        // 2) ברירת מחדל (למשל resources/static/logos/default-factory.jpg)
+        val fallback = ClassPathResource("static/logos/default-factory.jpg")
+        return if (fallback.exists()) fallback.inputStream.use { it.readBytes() } else ByteArray(0)
     }
 }
