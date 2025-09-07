@@ -6,20 +6,7 @@ Autoffer is a **reactive, cloud-native platform** that digitizes BOQ parsing, qu
 
 ---
 
-## 🧭 System Map (High-Level)
-
-```mermaid
-graph LR
-  A[Android / Web Clients] -- RSocket (TCP:7001) --> S[Autoffer_Server (Spring Boot, Kotlin)]
-  I[iOS Client] -- RSocket (WebSocket:8090) --> G[Gateway (Spring Boot, Kotlin)]
-  G -- RSocket (TCP:7001) --> S
-  S -- Reactive Repos --> M[(MongoDB Atlas)]
-  S -- HTTP (5051) --> D[DocAI (FastAPI, Python) <br/> + GCP Document AI]
-  subgraph Sidecars
-    W[Window-Measurement (Kotlin) <br/> HTTP:8001 /health]
-  end
-  S -.-> W
-```
+## 🧭 System 
 
 - **Autoffer_Server** — Core service: projects, chat, users, ads, BOQ/Quote PDFs.
 - **Gateway** — Bridges iOS (WebSocket) ⇄ server (TCP) for `rsocket-swift` compatibility.
