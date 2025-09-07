@@ -37,6 +37,83 @@ data class PdfFactoryUser(
 class PdfGenerator {
     private val log = LoggerFactory.getLogger(PdfGenerator::class.java)
 
+
+    fun generateBoqPdf(project: ProjectModel, client: UserModel, autofferLogoBytes: ByteArray): ByteArray {
+        val document = PDDocument()
+        val font = PDType1Font.HELVETICA_BOLD
+        val fontSize = 13f
+        val margin = 50f
+        val rowHeight = 25f
+        // ⬇️ הורדנו יותר נמוך כדי לא לדרוס את ההדר
+        val tableStartY = PDRectangle.A4.height - margin - 250f
+        val colWidths = listOf(30f, 70f, 90f, 70f, 70f, 40f, 120f)
+
+        val page = PDPage(PDRectangle.A4)
+        document.addPage(page)
+
+        val contentStream = PDPageContentStream(document, page)
+
+        // Draw Autoffer logo
+        val logoImage = JPEGFactory.createFromByteArray(document, autofferLogoBytes)
+        contentStream.drawImage(
+            logoImage,
+            margin,
+            PDRectangle.A4.height - margin - 50f,
+            120f,
+            50f
+        )
+
+        // Header
+        contentStream.beginText()
+        contentStream.setFont(font, fontSize)
+        contentStream.newLineAtOffset(margin, PDRectangle.A4.height - margin - 60f)
+        contentStream.showText("Bill of Quantities")
+        contentStream.newLineAtOffset(0f, -20f)
+        contentStream.showText("Project ID: ${project.id}")
+        contentStream.newLineAtOffset(0f, -20f)
+        contentStream.showText("Client: ${client.firstName} ${client.lastName}")
+        contentStream.newLineAtOffset(0f, -20f)
+        contentStream.showText("Phone: ${client.phoneNumber} | Email: ${client.email}")
+        contentStream.newLineAtOffset(0f, -20f)
+        contentStream.showText("Project Address: ${project.projectAddress}")
+        contentStream.endText()
+
+        // Table header
+        var currentX = margin
+        var currentY = tableStartY
+        val headers = listOf("#", "Profile", "Glass", "Width", "Height", "Qty", "Location")
+        for ((i, header) in headers.withIndex()) {
+            drawTableCell(contentStream, header, currentX, currentY, colWidths[i], rowHeight, font, fontSize)
+            currentX += colWidths[i]
+        }
+        currentY -= rowHeight
+
+        // Table rows
+        for ((index, item) in project.items.withIndex()) {
+            currentX = margin
+            val rowData = listOf(
+                (index + 1).toString(),
+                item.profile.profileNumber,
+                item.glass.type,
+                item.width.toInt().toString(),
+                item.height.toInt().toString(),
+                item.quantity.toString(),
+                item.location
+            )
+            for ((i, cell) in rowData.withIndex()) {
+                drawTableCell(contentStream, cell, currentX, currentY, colWidths[i], rowHeight, font, fontSize)
+                currentX += colWidths[i]
+            }
+            currentY -= rowHeight
+        }
+
+        contentStream.close()
+        val output = ByteArrayOutputStream()
+        document.save(output)
+        document.close()
+        return output.toByteArray()
+    }
+
     fun generateQuotePdf(
         project: ProjectModel,
         client: UserModel,
