@@ -12,16 +12,28 @@ spring:
         timeout: 90000
       data-mime-type: application/json
       metadata-mime-type: message/x.rsocket.composite-metadata.v0
+
   codec:
     max-in-memory-size: 64MB
+
   data:
     mongodb:
       uri: ${MONGODB_URI:mongodb+srv://roeihakmon:FvEleLgyd6bluJ6x@cluster0.acblw.mongodb.net/messaging-db?retryWrites=true&w=majority&appName=Cluster0}
 
 logging:
   level:
-    org.springframework.rsocket: DEBUG
-    org.springframework.data.mongodb: INFO
-    io.rsocket: DEBUG
+    org.springframework.jcl: WARN
 
+docai:
+  python:
+    baseUrl: http://localhost:8000
+    parsePath: /process_pdf/
+    connectTimeoutMs: 5000
+    readTimeoutMs: 90000
 
+measurement:
+  python:
+    baseUrl: http://localhost:8001
+    measurePath: /measure
+    connectTimeoutMs: 5000
+    readTimeoutMs: 90000

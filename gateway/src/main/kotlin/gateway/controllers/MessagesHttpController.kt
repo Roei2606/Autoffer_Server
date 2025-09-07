@@ -1,16 +1,14 @@
 package gateway.controllers
 
 import gateway.services.MessagesGateway
+import org.autoffer.models.MessageModel
+import org.autoffer.models.UnreadCountRequest
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-
-// DTOs/מודלים מהמודול המשותף
-import org.socialnetwork.messagingserver.models.MessageModel
-import org.socialnetwork.messagingserver.models.UnreadCountRequest
 
 @RestController
 @RequestMapping("/api/messages")

@@ -19,8 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "messaging-server"
+rootProject.name = "AutofferServer"
 
-
-include(":AutofferModelsRequests")
-include(":gateway")
+include(":AutofferServer", ":gateway", ":AutofferModelsRequests")

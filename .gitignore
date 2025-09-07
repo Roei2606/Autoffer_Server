@@ -38,3 +38,19 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+# Python virtualenvs
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Logs
+logs/
+*.log
+

@@ -1,0 +1,14 @@
+=== YOLO TRAINING SUMMARY ===
+Model Architecture: yolo11s-seg.pt
+Dataset: datasets/yolo_dataset/data.yaml
+Classes: ['frame']
+Training Images: 583
+Validation Images: 105
+Test Images: 0
+Total Images: 688
+Dataset Split: Train 84.7% | Val 15.3% | Test 0.0%
+Epochs: 200
+Batch Size: 8
+Image Size: 800
+Best Model: C:\Users\yuval\OneDrive - Afeka College Of Engineering\Final Project\CV_Model_ChArUco\yolo_training_output\yolo11s-seg_frame_detector3/weights/best.pt
+Training Results Directory: C:\Users\yuval\OneDrive - Afeka College Of Engineering\Final Project\CV_Model_ChArUco\yolo_training_output\yolo11s-seg_frame_detector3

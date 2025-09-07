@@ -1,12 +1,12 @@
 package gateway.controllers
 
 import gateway.services.ProfileGlassGateway
+import org.autoffer.models.AlumProfileModel
+import org.autoffer.models.GlassModel
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
-import org.socialnetwork.messagingserver.models.AlumProfileModel
-import org.socialnetwork.messagingserver.models.GlassModel
-import org.socialnetwork.messagingserver.models.SizeRequest
+
 
 @RestController
 @RequestMapping("/api")
@@ -19,7 +19,7 @@ class ProfileGlassHttpController(
         @RequestParam width: Int,
         @RequestParam height: Int
     ): Mono<List<AlumProfileModel>> =
-        gateway.matchBySize(SizeRequest(width = width, height = height)).collectList()
+        gateway.matchBySize(org.autoffer.models.SizeRequest(width = width, height = height)).collectList()
 
     // קיים: glasses.getByProfile → GET /api/glasses?profileNumber=
     @GetMapping("/glasses", produces = [MediaType.APPLICATION_JSON_VALUE])

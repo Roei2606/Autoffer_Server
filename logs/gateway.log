@@ -24,16 +24,22 @@ Build was configured to prefer settings repositories over project repositories b
  =========|_|==============|___/=/_/_/_/
 [32m :: Spring Boot :: [39m              [2m (v3.2.2)[0;39m
 
-[2m2025-09-05T17:25:05.821+03:00[0;39m [32m INFO[0;39m [35m76659[0;39m [2m---[0;39m [2m[           main][0;39m [2m[0;39m[36mgateway.AutofferGatewayApplicationKt    [0;39m [2m:[0;39m Starting AutofferGatewayApplicationKt using Java 17.0.13 with PID 76659 (/Users/roeihakmon/Library/Mobile Documents/com~apple~CloudDocs/RoeiPersonal/BscSE/messaging-server/gateway/build/classes/kotlin/main started by roeihakmon in /Users/roeihakmon/Library/Mobile Documents/com~apple~CloudDocs/RoeiPersonal/BscSE/messaging-server/gateway)
-[2m2025-09-05T17:25:05.823+03:00[0;39m [32m INFO[0;39m [35m76659[0;39m [2m---[0;39m [2m[           main][0;39m [2m[0;39m[36mgateway.AutofferGatewayApplicationKt    [0;39m [2m:[0;39m The following 1 profile is active: "dev"
-[2m2025-09-05T17:25:06.517+03:00[0;39m [33m WARN[0;39m [35m76659[0;39m [2m---[0;39m [2m[           main][0;39m [2m[0;39m[36monfigReactiveWebServerApplicationContext[0;39m [2m:[0;39m Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'RSocketClientConfig' defined in file [/Users/roeihakmon/Library/Mobile Documents/com~apple~CloudDocs/RoeiPersonal/BscSE/messaging-server/gateway/build/classes/kotlin/main/gateway/config/RSocketClientConfig.class]: Unexpected exception during bean creation
-[2m2025-09-05T17:25:06.531+03:00[0;39m [32m INFO[0;39m [35m76659[0;39m [2m---[0;39m [2m[           main][0;39m [2m[0;39m[36m.s.b.a.l.ConditionEvaluationReportLogger[0;39m [2m:[0;39m 
+[2m2025-09-07T13:30:23.854+03:00[0;39m [32m INFO[0;39m [35m37468[0;39m [2m---[0;39m [2m[           main][0;39m [2m[0;39m[36mgateway.AutofferGatewayApplicationKt    [0;39m [2m:[0;39m Starting AutofferGatewayApplicationKt using Java 17.0.13 with PID 37468 (/Users/roeihakmon/Desktop/AutofferServer/gateway/build/classes/kotlin/main started by roeihakmon in /Users/roeihakmon/Desktop/AutofferServer/gateway)
+[2m2025-09-07T13:30:23.858+03:00[0;39m [32m INFO[0;39m [35m37468[0;39m [2m---[0;39m [2m[           main][0;39m [2m[0;39m[36mgateway.AutofferGatewayApplicationKt    [0;39m [2m:[0;39m The following 1 profile is active: "dev"
+[2m2025-09-07T13:30:24.453+03:00[0;39m [31mERROR[0;39m [35m37468[0;39m [2m---[0;39m [2m[           main][0;39m [2m[0;39m[36mi.n.r.d.DnsServerAddressStreamProviders [0;39m [2m:[0;39m Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+[2m2025-09-07T13:30:24.516+03:00[0;39m [33m WARN[0;39m [35m37468[0;39m [2m---[0;39m [2m[           main][0;39m [2m[0;39m[36monfigReactiveWebServerApplicationContext[0;39m [2m:[0;39m Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'adsHttpController' defined in file [/Users/roeihakmon/Desktop/AutofferServer/gateway/build/classes/kotlin/main/gateway/controllers/AdsHttpController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'adsGateway' defined in file [/Users/roeihakmon/Desktop/AutofferServer/gateway/build/classes/kotlin/main/gateway/services/AdsGateway.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'rSocketRequester' defined in class path resource [gateway/config/RSocketClientConfig.class]: Failed to instantiate [org.springframework.messaging.rsocket.RSocketRequester]: Factory method 'rSocketRequester' threw exception with message: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: localhost/[0:0:0:0:0:0:0:1]:7001
+[2m2025-09-07T13:30:24.522+03:00[0;39m [32m INFO[0;39m [35m37468[0;39m [2m---[0;39m [2m[           main][0;39m [2m[0;39m[36m.s.b.a.l.ConditionEvaluationReportLogger[0;39m [2m:[0;39m 
 
 Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-[2m2025-09-05T17:25:06.553+03:00[0;39m [31mERROR[0;39m [35m76659[0;39m [2m---[0;39m [2m[           main][0;39m [2m[0;39m[36mo.s.boot.SpringApplication              [0;39m [2m:[0;39m Application run failed
+[2m2025-09-07T13:30:24.531+03:00[0;39m [31mERROR[0;39m [35m37468[0;39m [2m---[0;39m [2m[           main][0;39m [2m[0;39m[36mo.s.boot.SpringApplication              [0;39m [2m:[0;39m Application run failed
 
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'RSocketClientConfig' defined in file [/Users/roeihakmon/Library/Mobile Documents/com~apple~CloudDocs/RoeiPersonal/BscSE/messaging-server/gateway/build/classes/kotlin/main/gateway/config/RSocketClientConfig.class]: Unexpected exception during bean creation
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:534) ~[spring-beans-6.1.3.jar:6.1.3]
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'adsHttpController' defined in file [/Users/roeihakmon/Desktop/AutofferServer/gateway/build/classes/kotlin/main/gateway/controllers/AdsHttpController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'adsGateway' defined in file [/Users/roeihakmon/Desktop/AutofferServer/gateway/build/classes/kotlin/main/gateway/services/AdsGateway.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'rSocketRequester' defined in class path resource [gateway/config/RSocketClientConfig.class]: Failed to instantiate [org.springframework.messaging.rsocket.RSocketRequester]: Factory method 'rSocketRequester' threw exception with message: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: localhost/[0:0:0:0:0:0:0:1]:7001
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:798) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1354) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:561) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521) ~[spring-beans-6.1.3.jar:6.1.3]
 	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325) ~[spring-beans-6.1.3.jar:6.1.3]
 	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.1.3.jar:6.1.3]
 	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323) ~[spring-beans-6.1.3.jar:6.1.3]
@@ -48,26 +54,81 @@ org.springframework.beans.factory.BeanCreationException: Error creating bean wit
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-3.2.2.jar:3.2.2]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343) ~[spring-boot-3.2.2.jar:3.2.2]
 	at gateway.AutofferGatewayApplicationKt.main(AutofferGatewayApplication.kt:13) ~[main/:na]
-Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'app.messaging.rsocket.host' in value "${app.messaging.rsocket.host}"
-	at org.springframework.util.PropertyPlaceholderHelper.parseStringValue(PropertyPlaceholderHelper.java:180) ~[spring-core-6.1.3.jar:6.1.3]
-	at org.springframework.util.PropertyPlaceholderHelper.replacePlaceholders(PropertyPlaceholderHelper.java:126) ~[spring-core-6.1.3.jar:6.1.3]
-	at org.springframework.core.env.AbstractPropertyResolver.doResolvePlaceholders(AbstractPropertyResolver.java:239) ~[spring-core-6.1.3.jar:6.1.3]
-	at org.springframework.core.env.AbstractPropertyResolver.resolveRequiredPlaceholders(AbstractPropertyResolver.java:210) ~[spring-core-6.1.3.jar:6.1.3]
-	at org.springframework.context.support.PropertySourcesPlaceholderConfigurer.lambda$processProperties$0(PropertySourcesPlaceholderConfigurer.java:200) ~[spring-context-6.1.3.jar:6.1.3]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveEmbeddedValue(AbstractBeanFactory.java:921) ~[spring-beans-6.1.3.jar:6.1.3]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1374) ~[spring-beans-6.1.3.jar:6.1.3]
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353) ~[spring-beans-6.1.3.jar:6.1.3]
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:907) ~[spring-beans-6.1.3.jar:6.1.3]
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:785) ~[spring-beans-6.1.3.jar:6.1.3]
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'adsGateway' defined in file [/Users/roeihakmon/Desktop/AutofferServer/gateway/build/classes/kotlin/main/gateway/services/AdsGateway.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'rSocketRequester' defined in class path resource [gateway/config/RSocketClientConfig.class]: Failed to instantiate [org.springframework.messaging.rsocket.RSocketRequester]: Factory method 'rSocketRequester' threw exception with message: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: localhost/[0:0:0:0:0:0:0:1]:7001
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:798) ~[spring-beans-6.1.3.jar:6.1.3]
 	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237) ~[spring-beans-6.1.3.jar:6.1.3]
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1354) ~[spring-beans-6.1.3.jar:6.1.3]
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191) ~[spring-beans-6.1.3.jar:6.1.3]
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:561) ~[spring-beans-6.1.3.jar:6.1.3]
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521) ~[spring-beans-6.1.3.jar:6.1.3]
-	... 14 common frames omitted
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:907) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:785) ~[spring-beans-6.1.3.jar:6.1.3]
+	... 19 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'rSocketRequester' defined in class path resource [gateway/config/RSocketClientConfig.class]: Failed to instantiate [org.springframework.messaging.rsocket.RSocketRequester]: Factory method 'rSocketRequester' threw exception with message: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: localhost/[0:0:0:0:0:0:0:1]:7001
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:651) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:639) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1164) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:561) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:907) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:785) ~[spring-beans-6.1.3.jar:6.1.3]
+	... 33 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.messaging.rsocket.RSocketRequester]: Factory method 'rSocketRequester' threw exception with message: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: localhost/[0:0:0:0:0:0:0:1]:7001
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:177) ~[spring-beans-6.1.3.jar:6.1.3]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:647) ~[spring-beans-6.1.3.jar:6.1.3]
+	... 47 common frames omitted
+Caused by: reactor.core.Exceptions$ReactiveException: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: localhost/[0:0:0:0:0:0:0:1]:7001
+	at reactor.core.Exceptions.propagate(Exceptions.java:408) ~[reactor-core-3.6.2.jar:3.6.2]
+	at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:101) ~[reactor-core-3.6.2.jar:3.6.2]
+	at reactor.core.publisher.Mono.block(Mono.java:1728) ~[reactor-core-3.6.2.jar:3.6.2]
+	at gateway.config.RSocketClientConfig.rSocketRequester(RSocketClientConfig.kt:56) ~[main/:na]
+	at gateway.config.RSocketClientConfig$$SpringCGLIB$$0.CGLIB$rSocketRequester$0(<generated>) ~[main/:na]
+	at gateway.config.RSocketClientConfig$$SpringCGLIB$$FastClass$$1.invoke(<generated>) ~[main/:na]
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:258) ~[spring-core-6.1.3.jar:6.1.3]
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331) ~[spring-context-6.1.3.jar:6.1.3]
+	at gateway.config.RSocketClientConfig$$SpringCGLIB$$0.rSocketRequester(<generated>) ~[main/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:140) ~[spring-beans-6.1.3.jar:6.1.3]
+	... 48 common frames omitted
+	Suppressed: java.lang.Exception: #block terminated with an error
+		at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:103) ~[reactor-core-3.6.2.jar:3.6.2]
+		... 60 common frames omitted
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: localhost/[0:0:0:0:0:0:0:1]:7001
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:337) ~[netty-transport-4.1.105.Final.jar:4.1.105.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:335) ~[netty-transport-4.1.105.Final.jar:4.1.105.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776) ~[netty-transport-4.1.105.Final.jar:4.1.105.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724) ~[netty-transport-4.1.105.Final.jar:4.1.105.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650) ~[netty-transport-4.1.105.Final.jar:4.1.105.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.105.Final.jar:4.1.105.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.105.Final.jar:4.1.105.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.105.Final.jar:4.1.105.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.105.Final.jar:4.1.105.Final]
+	at java.base/java.lang.Thread.run(Thread.java:840) ~[na:na]
 
 
-[Incubating] Problems report is available at: file:///Users/roeihakmon/Library/Mobile%20Documents/com~apple~CloudDocs/RoeiPersonal/BscSE/messaging-server/build/reports/problems/problems-report.html
+[Incubating] Problems report is available at: file:///Users/roeihakmon/Desktop/AutofferServer/build/reports/problems/problems-report.html
 
 FAILURE: Build failed with an exception.
 

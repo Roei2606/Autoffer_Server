@@ -1,6 +1,7 @@
 package gateway.controllers
 
 import gateway.services.ProjectGateway
+import org.autoffer.models.*
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -8,8 +9,6 @@ import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-// DTOs/מודלים ממודול autoffer-dtos
-import org.socialnetwork.messagingserver.models.*
 
 @RestController
 @RequestMapping("/api")
@@ -29,7 +28,7 @@ class ProjectHttpController(
 
     // RSocket: "projects.sendToFactories"
     @PostMapping("/projects/send-boq", consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun sendToFactories(@RequestBody req: SendBOQRequest): Mono<Void> =
+    fun sendToFactories(@RequestBody req: org.autoffer.models.SendBOQRequest): Mono<Void> =
         gateway.sendToFactories(req)
 
     // RSocket: "projects.getAllForUser"

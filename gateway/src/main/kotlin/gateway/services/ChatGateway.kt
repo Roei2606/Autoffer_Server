@@ -1,12 +1,10 @@
 package gateway.services
 
+import org.autoffer.models.*
 import org.springframework.stereotype.Service
 import org.springframework.messaging.rsocket.RSocketRequester
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-
-// DTOs/מודלים מהמודול המשותף (ללא שינוי)
-import org.socialnetwork.messagingserver.models.*
 import org.socialnetwork.messagingserver.modelsdata.UnreadCountResponse
 
 @Service
@@ -26,7 +24,7 @@ class ChatGateway(
             .retrieveFlux(ChatModel::class.java)
 
     /** תואם: @MessageMapping("chats.getMessages") */
-    fun getChatMessages(req: ChatMessagesRequest): Flux<MessageModel> =
+    fun getChatMessages(req: org.autoffer.models.ChatMessagesRequest): Flux<MessageModel> =
         rs.route("chats.getMessages")
             .data(req)
             .retrieveFlux(MessageModel::class.java)

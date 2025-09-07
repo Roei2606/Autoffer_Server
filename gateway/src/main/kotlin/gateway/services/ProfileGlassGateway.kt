@@ -1,19 +1,18 @@
 package gateway.services
 
+import org.autoffer.models.AlumProfileModel
+import org.autoffer.models.GlassModel
 import org.springframework.messaging.rsocket.RSocketRequester
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 
-import org.socialnetwork.messagingserver.models.AlumProfileModel
-import org.socialnetwork.messagingserver.models.GlassModel
-import org.socialnetwork.messagingserver.models.SizeRequest
 
 @Service
 class ProfileGlassGateway(
     private val rs: RSocketRequester
 ) {
     /** קיים אצלך: @MessageMapping("profiles.matchBySize") */
-    fun matchBySize(req: SizeRequest): Flux<AlumProfileModel> =
+    fun matchBySize(req: org.autoffer.models.SizeRequest): Flux<AlumProfileModel> =
         rs.route("profiles.matchBySize")
             .data(req)
             .retrieveFlux(AlumProfileModel::class.java)

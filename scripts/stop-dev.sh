@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -21,14 +21,18 @@ stop_one () {
   fi
 }
 
+# ── עצירת השירותים לפי pidfiles ──────────────────────────────
 stop_one "gateway"
+stop_one "measurement"
 stop_one "docai"
 
-# ניקוי לפי פורטים למקרה שנשארו מאזינים תלויים
-DOCAI_PORT="${DOCAI_PORT:-5051}"
+# ── ניקוי לפי פורטים למקרה שנשארו מאזינים תלויים ─────────────
+DOCAI_PORT="${DOCAI_PORT:-8000}"     # תואם ל־start-dev.sh
+MEASUREMENT_PORT="${MEASUREMENT_PORT:-8010}"
 GATEWAY_PORT="${GATEWAY_PORT:-8090}"
 
-pids="$(lsof -ti tcp:${DOCAI_PORT} || true)"; [[ -n "$pids" ]] && kill $pids 2>/dev/null || true; sleep 0.5; [[ -n "$pids" ]] && kill -9 $pids 2>/dev/null || true
+pids="$(lsof -ti tcp:${DOCAI_PORT}   || true)"; [[ -n "$pids" ]] && kill $pids 2>/dev/null || true; sleep 0.5; [[ -n "$pids" ]] && kill -9 $pids 2>/dev/null || true
+pids="$(lsof -ti tcp:${MEASUREMENT_PORT} || true)"; [[ -n "$pids" ]] && kill $pids 2>/dev/null || true; sleep 0.5; [[ -n "$pids" ]] && kill -9 $pids 2>/dev/null || true
 pids="$(lsof -ti tcp:${GATEWAY_PORT} || true)"; [[ -n "$pids" ]] && kill $pids 2>/dev/null || true; sleep 0.5; [[ -n "$pids" ]] && kill -9 $pids 2>/dev/null || true
 
 echo "All sidecars stopped."

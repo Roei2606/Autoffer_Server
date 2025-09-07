@@ -6,7 +6,7 @@ plugins {
     application
 }
 
-group = "org.socialnetwork"
+group = "org.autoffer"
 version = "0.0.1-SNAPSHOT"
 
 java { toolchain { languageVersion = JavaLanguageVersion.of(17) } }
@@ -32,9 +32,14 @@ dependencies {
     implementation("org.apache.pdfbox:pdfbox:2.0.30")
 
     implementation(project(":AutofferModelsRequests"))
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
+}
+
+configurations.all {
+    exclude(group = "commons-logging", module = "commons-logging")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
@@ -50,15 +55,30 @@ tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
 tasks.withType<Test> { useJUnitPlatform() }
 
 application {
-    mainClass.set("org.socialnetwork.messagingserver.MessagingServerApplicationKt")
+    mainClass.set("org.Autoffer.AutofferServerApplicationKt")
+}
+
+
+tasks.register<Exec>("startSidecars") {
+    workingDir = rootDir.resolve("scripts")
+    commandLine("bash", "start-dev.sh")
+}
+
+tasks.register<Exec>("stopSidecars") {
+    workingDir = rootDir.resolve("scripts")
+    commandLine("bash", "stop-dev.sh")
+}
+
+
+tasks.named("bootRun") {
+    dependsOn("startSidecars")
 }
 
 tasks.register<JavaExec>("rsocketClient") {
     group = "verification"
     description = "Invoke RSocket endpoints (parse/preview/create) via WebSocket"
     classpath = sourceSets.main.get().runtimeClasspath
-    mainClass.set("org.socialnetwork.messagingserver.tools.RsocketWsTestKt")
-    // אם תרצה לראות סטאקטרייסים מלאים:
+    mainClass.set("org.Autoffer.tools.RsocketWsTestKt")
     jvmArgs("-Dorg.slf4j.simpleLogger.defaultLogLevel=info")
 }
 

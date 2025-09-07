@@ -1,12 +1,11 @@
 package gateway.services
 
+import org.autoffer.models.*
 import org.springframework.stereotype.Service
 import org.springframework.messaging.rsocket.RSocketRequester
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-// ייבוא של המודלים/DTOs בדיוק כמו בשרת המקורי (מגיעים ממודול autoffer-dtos)
-import org.socialnetwork.messagingserver.models.*
 
 @Service
 class ProjectGateway(private val rs: RSocketRequester) {
@@ -17,7 +16,7 @@ class ProjectGateway(private val rs: RSocketRequester) {
     fun getById(projectId: String): Mono<ProjectDTO> =
         rs.route("projects.getById").data(projectId).retrieveMono(ProjectDTO::class.java)
 
-    fun sendToFactories(req: SendBOQRequest): Mono<Void> =
+    fun sendToFactories(req: org.autoffer.models.SendBOQRequest): Mono<Void> =
         rs.route("projects.sendToFactories").data(req).send()
 
     fun getAllForUser(req: UserProjectRequest): Flux<ProjectDTO> =

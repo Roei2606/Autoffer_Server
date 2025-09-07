@@ -9,7 +9,6 @@ import org.springframework.messaging.rsocket.RSocketRequester
 import org.springframework.messaging.rsocket.RSocketStrategies
 import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.http.codec.json.Jackson2JsonEncoder
-import io.rsocket.core.RSocketConnector
 import io.rsocket.frame.decoder.PayloadDecoder
 import io.rsocket.transport.netty.client.WebsocketClientTransport
 import io.rsocket.transport.netty.client.TcpClientTransport
@@ -20,10 +19,10 @@ import java.time.Duration
 @Configuration
 class RSocketClientConfig(
     @Value("\${autoffer.rsocket.transport}") private val transport: String,
-    @Value("\${app.messaging.rsocket.host}") private val host: String,
-    @Value("\${app.messaging.rsocket.port}") private val port: Int,
+    @Value("\${autoffer.rsocket.host}") private val host: String,
+    @Value("\${autoffer.rsocket.port}") private val port: Int,
     @Value("\${autoffer.rsocket.path:/rsocket}") private val path: String,
-    private val objectMapper: ObjectMapper // ← Boot מספק Mapper עם Kotlin module
+    private val objectMapper: ObjectMapper
 ) {
 
     // משתמשים ב-ObjectMapper של Spring (עם kotlin-module) לקודקים של RSocket

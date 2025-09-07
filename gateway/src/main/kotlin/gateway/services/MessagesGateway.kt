@@ -1,13 +1,13 @@
 package gateway.services
 
+import org.autoffer.models.MessageModel
+import org.autoffer.models.UnreadCountRequest
 import org.springframework.messaging.rsocket.RSocketRequester
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-// DTOs/מודלים מהמודול המשותף
-import org.socialnetwork.messagingserver.models.MessageModel
-import org.socialnetwork.messagingserver.models.UnreadCountRequest
+
 
 @Service
 class MessagesGateway(

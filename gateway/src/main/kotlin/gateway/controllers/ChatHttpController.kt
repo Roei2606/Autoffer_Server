@@ -1,13 +1,13 @@
 package gateway.controllers
 
 import gateway.services.ChatGateway
+import org.autoffer.models.*
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-// DTOs/מודלים מהמוביל המשותף
-import org.socialnetwork.messagingserver.models.*
+
 import org.socialnetwork.messagingserver.modelsdata.UnreadCountResponse
 
 @RestController
@@ -35,7 +35,7 @@ class ChatHttpController(
         @RequestParam(required = false, defaultValue = "0") page: Int,
         @RequestParam(required = false, defaultValue = "50") size: Int
     ): Flux<MessageModel> =
-        gateway.getChatMessages(ChatMessagesRequest(chatId = chatId, page = page, size = size))
+        gateway.getChatMessages(org.autoffer.models.ChatMessagesRequest(chatId = chatId, page = page, size = size))
 
     /** RSocket: "chats.streamMessages"  |  SSE */
     @GetMapping(

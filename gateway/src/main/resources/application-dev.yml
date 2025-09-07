@@ -1,0 +1,16 @@
+server:
+  port: 8090
+
+app:
+  messaging:
+    rsocket:
+      host: localhost
+      port: 7001
+
+autoffer:
+  rsocket:
+    transport: tcp      # או ws אם אתה רוצה WebSocket
+    host: localhost
+    port: 7001
+    # אם transport=ws → תוסיף path
+    # path: /rsocket
