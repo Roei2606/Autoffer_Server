@@ -29,10 +29,10 @@ Autoffer is a **reactive, cloud-native platform** that digitizes BOQ parsing, qu
 
 ## 🔌 Network & Ports (dev)
 
-- **Autoffer_Server**: HTTP **:8080**, RSocket TCP **:7001**  
+- **Autoffer_Server**: Netty **:8080**, RSocket TCP **:7001**  
 - **Gateway**: RSocket over WebSocket **:8090** (`ws://…/rsocket`)  
-- **DocAI (FastAPI)**: HTTP **:5051**  
-- **Window-Measurement**: HTTP **:8001** (`/health`)  
+- **DocAI (FastAPI)**: HTTP **:8000**  
+- **Window-Measurement**: HTTP **:8010** (`/health`)  
 
 ---
 
